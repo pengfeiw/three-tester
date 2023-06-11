@@ -12,10 +12,10 @@ const createScene = (container: Element) => {
     container.appendChild(renderer.domElement);
     const scene = new Scene();
     scene.background = new Color(0xFFFFFF);
-    const color = { color: 0xFFFFFF};
+    const color = { color: "#FFFFFF"};
     const folder = gui.addFolder("Scene");
-    folder.addColor(color, "color").name("background color").onChange((value: number) => {
-        scene.background = new Color(value);
+    folder.addColor(color, "color").name("background color").onChange(() => {
+        (scene.background as Color).set(color.color);
     });
     return { renderer, scene };
 };
@@ -35,14 +35,16 @@ const createCube = (uiName: string, color: ColorRepresentation, x: number) => {
     const w = 1, h = 1, d = 1;
     const geo = new BoxGeometry(w, h, d);
     const mat = new MeshStandardMaterial({color});
-    const basicMat = new MeshBasicMaterial({color});
     const cube = new Mesh<BufferGeometry, MeshStandardMaterial | MeshBasicMaterial>(geo, mat);
     cube.position.x = x;
     cube.position.y = 0.5;
     const folder = gui.addFolder(uiName);
 
-    folder.addColor(basicMat, "color").onChange((value: number) => {
-        cube.material.color.set(value);
+    const params = {
+        modelColor: color
+    };
+    folder.addColor(params, "modelColor").onChange(() => {
+        cube.material.color.set(params.modelColor);
         cube.material.needsUpdate = true;
     });
 
@@ -110,9 +112,9 @@ const createAxes = () => {
     scene.add(directionalLight, directionalLightHelper);
     scene.add(createAmbientLight());
     [
-        createCube("cube1", "red", -3),
-        createCube("cube2", "green", 0),
-        createCube("cube3", "blue", 3),
+        createCube("cube1", "#FF0000", -3),
+        createCube("cube2", "#00FF00", 0),
+        createCube("cube3", "#0000FF", 3),
     ].forEach((cube) => scene.add(cube));
     scene.add(new GridHelper());
     scene.add(createGrid());
