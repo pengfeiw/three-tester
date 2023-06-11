@@ -24,7 +24,7 @@ const createCamera = (container: Element, renderer: WebGLRenderer) => {
     const fov = 45;
     const aspect = container.clientWidth / container.clientHeight;
     const camera = new PerspectiveCamera(fov, aspect, 0.1, 10000);
-    camera.position.set(0, 0, 10);
+    camera.position.set(0, 5, 20);
     const orbitControls = new OrbitControls( camera, renderer.domElement );
     orbitControls.update();
 
